@@ -37,7 +37,7 @@ function Checkout() {
   // 이미지 URL 변환 함수
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
-    if (imageUrl.startsWith('http')) return imageUrl;
+    if (imageUrl.startsWith('http')) return encodeURI(imageUrl);
     return `${API_BASE_URL}${imageUrl}`;
   };
 

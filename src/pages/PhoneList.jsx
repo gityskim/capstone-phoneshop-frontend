@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import phoneService from '../services/phoneService';
 import reviewService from '../services/reviewService';
+import API_BASE_URL from '../config/api';
 import '../styles/PhoneList.css';
 
 function PhoneList() {
@@ -293,10 +294,10 @@ function PhoneList() {
               <Link to={`/phones/${phone.id}`} className="phone-card">
                 <div className="phone-image">
                   <img 
-                    src={phone.imageUrl && phone.imageUrl.startsWith('http') 
-                      ? phone.imageUrl 
+                    src={phone.imageUrl
+                      ? (phone.imageUrl.startsWith('http') ? encodeURI(phone.imageUrl) : `${API_BASE_URL}${phone.imageUrl}`)
                       : `https://placehold.co/300x300/667eea/FFF?text=${encodeURIComponent(phone.name)}`
-                    } 
+                    }
                     alt={phone.name}
                     onError={(e) => {
                       if (!e.target.dataset.fallback) {
