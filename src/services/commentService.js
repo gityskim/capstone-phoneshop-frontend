@@ -1,7 +1,7 @@
 // src/services/commentService.js
 // 댓글(Q&A) API 통신 서비스
 
-const API_BASE_URL = 'http://localhost:8080';
+import { API_BASE_URL } from '../config/api';
 
 class CommentService {
   // 특정 휴대폰의 댓글 목록 조회
