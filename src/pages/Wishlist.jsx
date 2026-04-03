@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import favoriteService from '../services/favoriteService';
+import API_BASE_URL from '../config/api';
 import '../styles/Wishlist.css';
 
 function Wishlist() {
@@ -150,7 +151,7 @@ function Wishlist() {
                 {/* 이미지 */}
                 <Link to={`/phones/${phone.phoneId}`} className="phone-image">
                   <img 
-                    src={phone.imageUrl || `https://via.placeholder.com/300x300?text=${phone.name}`} 
+                    src={phone.imageUrl ? (phone.imageUrl.startsWith('http') ? encodeURI(phone.imageUrl) : `${API_BASE_URL}${phone.imageUrl}`) : `https://via.placeholder.com/300x300?text=${phone.name}`}
                     alt={phone.name}
                   />
                 </Link>

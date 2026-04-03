@@ -5,6 +5,7 @@ import favoriteService from '../services/favoriteService';
 import cartService from '../services/cartService';
 import reviewService from '../services/reviewService';
 import commentService from '../services/commentService';
+import API_BASE_URL from '../config/api';
 import '../styles/PhoneDetail.css';
 
 function PhoneDetail() {
@@ -438,8 +439,8 @@ function PhoneDetail() {
           <section className="image-section">
             <div className="main-image">
               <img 
-                src={phone.imageUrl && phone.imageUrl.startsWith('http') 
-                  ? phone.imageUrl 
+                src={phone.imageUrl
+                  ? (phone.imageUrl.startsWith('http') ? encodeURI(phone.imageUrl) : `${API_BASE_URL}${phone.imageUrl}`)
                   : `https://placehold.co/500x500/667eea/FFF?text=${encodeURIComponent(phone.name)}`
                 }
                 alt={phone.name}

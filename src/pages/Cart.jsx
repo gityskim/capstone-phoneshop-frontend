@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import cartService from '../services/cartService';
+import API_BASE_URL from '../config/api';
 import '../styles/Cart.css';
 
 function Cart() {
@@ -296,7 +297,7 @@ function Cart() {
 
                   <div className="item-image">
                     <img
-                      src={item.imageUrl || `https://via.placeholder.com/150x150?text=${item.name}`}
+                      src={item.imageUrl ? (item.imageUrl.startsWith('http') ? encodeURI(item.imageUrl) : `${API_BASE_URL}${item.imageUrl}`) : `https://via.placeholder.com/150x150?text=${item.name}`}
                       alt={item.name}
                     />
                   </div>

@@ -42,7 +42,7 @@ function OrderHistory() {
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
     // 이미 http로 시작하면 그대로 반환
-    if (imageUrl.startsWith('http')) return imageUrl;
+    if (imageUrl.startsWith('http')) return encodeURI(imageUrl);
     // 상대 경로면 백엔드 URL 붙이기
     return `${API_BASE_URL}${imageUrl}`;
   };
