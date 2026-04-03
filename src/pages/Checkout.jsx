@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import orderService from '../services/orderService';
+import { API_BASE_URL } from '../config/api';
 import '../styles/Checkout.css';
-
-const API_BASE_URL = 'http://localhost:8080'; // 백엔드 서버 주소
 
 function Checkout() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 // src/services/orderService.js
 // 주문/결제 API 통신 서비스
 
-const API_BASE_URL = 'http://localhost:8080';
+import { API_BASE_URL } from '../config/api';
 
 class OrderService {
   // 카카오페이 결제 준비

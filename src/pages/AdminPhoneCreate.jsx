@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import '../styles/AdminPhoneCreate.css';
 
 function AdminPhoneCreate() {
@@ -106,7 +107,7 @@ function AdminPhoneCreate() {
       submitData.append('phone', JSON.stringify(phoneData));
       submitData.append('image', imageFile);
 
-      const response = await fetch('http://localhost:8080/phones', {
+      const response = await fetch(`${API_BASE_URL}/phones`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import orderService from '../services/orderService';
+import { API_BASE_URL } from '../config/api';
 import '../styles/OrderHistory.css';
-
-const API_BASE_URL = 'http://localhost:8080'; // 백엔드 서버 주소
 
 function OrderHistory() {
   const navigate = useNavigate();
