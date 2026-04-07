@@ -7,7 +7,7 @@ class OrderService {
   // 카카오페이 결제 준비
   async preparePayment(orderData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/kakao-pay/ready`, {
+      const response = await fetch(`${API_BASE_URL}/v1/kakao-pay/ready`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ class OrderService {
   async approvePayment(pgToken) {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/v1/kakao-pay/approve?pg_token=${pgToken}`,
+        `${API_BASE_URL}/v1/kakao-pay/approve?pg_token=${pgToken}`,
         {
           method: 'GET',
         }
