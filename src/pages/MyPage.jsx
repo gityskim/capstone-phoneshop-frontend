@@ -104,8 +104,8 @@ function MyPage() {
             </div>
             <span className="arrow">→</span>
           </Link>
-
-          <Link to="/my-reviews" className="menu-button">
+{/* 기능 구현 후 활성화 예정 */}
+          {/* <Link to="/my-reviews" className="menu-button">
             <div className="menu-left">
               <span className="icon">⭐</span>
               <span>내가 쓴 리뷰</span>
@@ -119,7 +119,7 @@ function MyPage() {
               <span>내 문의 내역</span>
             </div>
             <span className="arrow">→</span>
-          </Link>
+          </Link> */}
         </section>
 
         {/* 설정 메뉴 */}

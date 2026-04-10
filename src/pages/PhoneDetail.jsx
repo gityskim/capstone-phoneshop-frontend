@@ -30,7 +30,10 @@ function PhoneDetail() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState('');
 
-    // ===== 새로 추가: 장바구니로 이동 =====
+  // ===== 찜 개수 state 추가 =====
+  const [favoriteCount, setFavoriteCount] = useState(0);
+
+  // 장바구니로 이동
   const handleGoToCart = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     
@@ -42,6 +45,20 @@ function PhoneDetail() {
  
     navigate('/cart');
   };
+
+  // ===== 찜 개수 로드 =====
+  const loadFavoriteCount = useCallback(async () => {
+    try {
+      const allPhones = await phoneService.getAllPhones();
+      const currentPhone = allPhones.find(p => p.id === parseInt(phoneId));
+      
+      if (currentPhone && currentPhone.favoriteCount !== undefined) {
+        setFavoriteCount(currentPhone.favoriteCount);
+      }
+    } catch (error) {
+      console.error('찜 개수 로드 실패:', error);
+    }
+  }, [phoneId]);
 
   // Q&A 목록 로드
   const loadComments = useCallback(async () => {
@@ -102,13 +119,16 @@ function PhoneDetail() {
 
       // Q&A 목록
       await loadComments();
+
+      // ===== 찜 개수 로드 추가 =====
+      await loadFavoriteCount();
     } catch (error) {
       console.error('데이터 로드 실패:', error);
       setError('정보를 불러오는데 실패했습니다');
     } finally {
       setLoading(false);
     }
-  }, [phoneId, loadReviews, loadAverageRating, loadComments]);
+  }, [phoneId, loadReviews, loadAverageRating, loadComments, loadFavoriteCount]);
 
   useEffect(() => {
     loadPhoneData();
@@ -134,11 +154,9 @@ function PhoneDetail() {
 
       await reviewService.addReview(phoneId, newReview.rating, newReview.content);
       
-      // 리뷰 폼 초기화
       setNewReview({ rating: 5, content: '' });
       setShowReviewForm(false);
       
-      // 리뷰 목록 및 평균 별점 새로고침
       await loadReviews();
       await loadAverageRating();
       
@@ -146,7 +164,6 @@ function PhoneDetail() {
     } catch (error) {
       console.error('리뷰 작성 실패:', error);
       
-      // 중복 리뷰 에러 체크
       const errorMessage = error.message || '';
       if (errorMessage.includes('이미') || errorMessage.includes('작성')) {
         alert('이미 이 제품에 리뷰를 작성하셨습니다.\n리뷰는 제품당 1개만 작성 가능합니다.');
@@ -164,11 +181,8 @@ function PhoneDetail() {
 
     try {
       await reviewService.deleteReview(reviewId);
-      
-      // 리뷰 목록 및 평균 별점 새로고침
       await loadReviews();
       await loadAverageRating();
-      
       alert('리뷰가 삭제되었습니다');
     } catch (error) {
       console.error('리뷰 삭제 실패:', error);
@@ -201,11 +215,8 @@ function PhoneDetail() {
 
       await commentService.createComment(phoneId, newComment);
       
-      // 폼 초기화
       setNewComment('');
       setShowCommentForm(false);
-      
-      // 목록 새로고침
       await loadComments();
       
       alert('문의가 등록되었습니다!');
@@ -242,11 +253,8 @@ function PhoneDetail() {
     try {
       await commentService.updateComment(commentId, editingContent);
       
-      // 편집 모드 종료
       setEditingCommentId(null);
       setEditingContent('');
-      
-      // 목록 새로고침
       await loadComments();
       
       alert('문의가 수정되었습니다');
@@ -264,10 +272,7 @@ function PhoneDetail() {
 
     try {
       await commentService.deleteComment(commentId);
-      
-      // 목록 새로고침
       await loadComments();
-      
       alert('문의가 삭제되었습니다');
     } catch (error) {
       console.error('문의 삭제 실패:', error);
@@ -289,10 +294,12 @@ function PhoneDetail() {
       if (isWishlisted) {
         await favoriteService.deleteFavorite(phoneId);
         setIsWishlisted(false);
+        setFavoriteCount(prev => Math.max(0, prev - 1)); // ===== 찜 개수 감소 =====
         alert('찜 목록에서 제거되었습니다');
       } else {
         await favoriteService.addFavorite(phoneId);
         setIsWishlisted(true);
+        setFavoriteCount(prev => prev + 1); // ===== 찜 개수 증가 =====
         alert('찜 목록에 추가되었습니다');
       }
     } catch (error) {
@@ -330,12 +337,10 @@ function PhoneDetail() {
         return;
       }
  
-      // 수량만큼 반복해서 추가
       for (let i = 0; i < quantity; i++) {
         await cartService.addItem(phone.id);
       }
  
-      // ===== 수정된 부분: 확인창 =====
       const goToCart = window.confirm(
         `장바구니에 ${quantity}개가 추가되었습니다!\n장바구니로 이동하시겠습니까?`
       );
@@ -343,14 +348,12 @@ function PhoneDetail() {
       if (goToCart) {
         navigate('/cart');
       }
-      // ===== 수정 끝 =====
     } catch (error) {
       console.error('장바구니 추가 실패:', error);
       alert(error.message || '장바구니 추가에 실패했습니다');
     }
   };
 
-  // 바로구매
   const handleBuyNow = async () => {
     if (!phone) return;
 
@@ -363,12 +366,10 @@ function PhoneDetail() {
         return;
       }
 
-      // 장바구니에 추가
       for (let i = 0; i < quantity; i++) {
         await cartService.addItem(phone.id);
       }
 
-      // 장바구니로 이동
       navigate('/cart');
     } catch (error) {
       console.error('구매 실패:', error);
@@ -389,7 +390,6 @@ function PhoneDetail() {
     });
   };
 
-  // 별점 렌더링
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -402,7 +402,6 @@ function PhoneDetail() {
     return stars;
   };
 
-  // 로딩 중
   if (loading) {
     return (
       <div className="phone-detail-page">
@@ -420,7 +419,6 @@ function PhoneDetail() {
     );
   }
 
-  // 에러 발생
   if (error || !phone) {
     return (
       <div className="phone-detail-page">
@@ -454,7 +452,6 @@ function PhoneDetail() {
       </header>
 
       <main className="detail-content">
-        {/* 상단: 이미지 + 기본 정보 */}
         <div className="detail-container">
           <section className="image-section">
             <div className="main-image">
@@ -479,14 +476,24 @@ function PhoneDetail() {
             <h2 className="phone-name">{phone.name}</h2>
             <p className="phone-price">{formatPrice(phone.price)}</p>
             
-            {/* 평균 별점 */}
-            {averageRating > 0 && (
-              <div className="average-rating">
-                <div className="stars">{renderStars(Math.round(averageRating))}</div>
-                <span className="rating-text">{averageRating.toFixed(1)}</span>
-                <span className="review-count">({reviews.length}개 리뷰)</span>
-              </div>
-            )}
+            {/* ===== 평균 별점 + 찜 개수 ===== */}
+            <div className="phone-meta-stats">
+              {averageRating > 0 && (
+                <div className="average-rating">
+                  <div className="stars">{renderStars(Math.round(averageRating))}</div>
+                  <span className="rating-text">{averageRating.toFixed(1)}</span>
+                  <span className="review-count">({reviews.length}개 리뷰)</span>
+                </div>
+              )}
+              
+              {/* 찜 개수 */}
+              {favoriteCount > 0 && (
+                <div className="favorite-count-badge">
+                  <span className="favorite-icon">💗</span>
+                  <span className="favorite-text">{favoriteCount}명이 찜했어요</span>
+                </div>
+              )}
+            </div>
 
             {/* 수량 선택 */}
             <div className="option-section">
@@ -522,7 +529,6 @@ function PhoneDetail() {
           </section>
         </div>
 
-        {/* 하단: 제품 정보 + 스펙 */}
         <div className="product-info-container">
           <section className="product-info-section">
             <h3>📋 제품 정보</h3>
@@ -591,7 +597,6 @@ function PhoneDetail() {
           )}
         </div>
 
-        {/* 리뷰 섹션 */}
         <section className="review-section">
           <div className="review-header">
             <h3>⭐ 리뷰 ({reviews.length})</h3>
@@ -603,7 +608,6 @@ function PhoneDetail() {
             </button>
           </div>
 
-          {/* 리뷰 작성 폼 */}
           {showReviewForm && (
             <form onSubmit={handleSubmitReview} className="review-form">
               <div className="form-group">
@@ -638,7 +642,6 @@ function PhoneDetail() {
             </form>
           )}
 
-          {/* 리뷰 목록 */}
           {reviews.length === 0 ? (
             <div className="review-placeholder">
               <p>아직 작성된 리뷰가 없습니다.</p>
@@ -672,7 +675,6 @@ function PhoneDetail() {
           )}
         </section>
 
-        {/* Q&A 섹션 */}
         <section className="comment-section">
           <div className="comment-header">
             <h3>💬 상품 문의 ({comments.length})</h3>
@@ -684,7 +686,6 @@ function PhoneDetail() {
             </button>
           </div>
 
-          {/* 문의 작성 폼 */}
           {showCommentForm && (
             <form onSubmit={handleSubmitComment} className="comment-form">
               <div className="form-group">
@@ -705,7 +706,6 @@ function PhoneDetail() {
             </form>
           )}
 
-          {/* 문의 목록 */}
           {comments.length === 0 ? (
             <div className="comment-placeholder">
               <p>아직 작성된 문의가 없습니다.</p>
@@ -737,7 +737,6 @@ function PhoneDetail() {
                     </div>
                   </div>
                   
-                  {/* 편집 모드 */}
                   {editingCommentId === comment.commentId ? (
                     <div className="comment-edit-form">
                       <textarea

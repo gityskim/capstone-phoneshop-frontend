@@ -1024,3 +1024,88 @@
     grid-column: 1; /* 모바일에서는 전체 폭 해제 */
   }
 }
+
+/* PhoneDetail.css에 추가할 스타일 */
+
+/* 평점 + 찜 개수 메타 정보 컨테이너 */
+.phone-meta-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+/* 평균 별점 (기존 스타일 유지) */
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.average-rating .stars {
+  display: flex;
+  gap: 2px;
+}
+
+.average-rating .star {
+  font-size: 20px;
+  color: #ddd;
+}
+
+.average-rating .star.filled {
+  color: #fbbf24;
+}
+
+.average-rating .rating-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.average-rating .review-count {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ===== 찜 개수 배지 ===== */
+.favorite-count-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 15px;
+  background: linear-gradient(135deg, #fce7f3 0%, #ffe4e6 100%);
+  border-radius: 8px;
+}
+
+.favorite-count-badge .favorite-icon {
+  font-size: 20px;
+}
+
+.favorite-count-badge .favorite-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ec4899;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .phone-meta-stats {
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .favorite-count-badge {
+    padding: 10px 12px;
+  }
+
+  .favorite-count-badge .favorite-icon {
+    font-size: 18px;
+  }
+
+  .favorite-count-badge .favorite-text {
+    font-size: 14px;
+  }
+}
