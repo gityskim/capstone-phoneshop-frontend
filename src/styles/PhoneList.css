@@ -753,3 +753,65 @@
     min-width: 100%;
   }
 }
+/* PhoneList.css에 추가할 스타일 */
+
+/* 평점 + 찜 개수 컨테이너 */
+.phone-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* 평점 표시 */
+.phone-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phone-rating .stars {
+  display: flex;
+  gap: 2px;
+}
+
+.phone-rating .star {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.phone-rating .star.filled {
+  color: #fbbf24;
+}
+
+.phone-rating .rating-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+}
+
+.phone-rating .review-count {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===== 찜 개수 표시 ===== */
+.phone-favorite {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #fce7f3 0%, #ffe4e6 100%);
+  border-radius: 12px;
+}
+
+.phone-favorite .favorite-icon {
+  font-size: 13px;
+}
+
+.phone-favorite .favorite-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ec4899;
+}

@@ -312,13 +312,24 @@ function PhoneList() {
                   <div className="brand-badge">{phone.brand}</div>
                   <h3 className="phone-name">{phone.name}</h3>
                   
-                  {phone.averageRating > 0 && (
-                    <div className="phone-rating">
-                      <div className="stars">{renderStars(phone.averageRating)}</div>
-                      <span className="rating-text">{phone.averageRating.toFixed(1)}</span>
-                      <span className="review-count">({phone.reviewCount})</span>
-                    </div>
-                  )}
+                  {/* ===== 평점 + 찜 개수 표시 ===== */}
+                  <div className="phone-stats">
+                    {phone.averageRating > 0 && (
+                      <div className="phone-rating">
+                        <div className="stars">{renderStars(phone.averageRating)}</div>
+                        <span className="rating-text">{phone.averageRating.toFixed(1)}</span>
+                        <span className="review-count">({phone.reviewCount})</span>
+                      </div>
+                    )}
+                    
+                    {/* 찜 개수 */}
+                    {phone.favoriteCount > 0 && (
+                      <div className="phone-favorite">
+                        <span className="favorite-icon">💗</span>
+                        <span className="favorite-count">{phone.favoriteCount}</span>
+                      </div>
+                    )}
+                  </div>
                   
                   <p className="phone-price">{formatPrice(phone.price)}</p>
                 </div>
