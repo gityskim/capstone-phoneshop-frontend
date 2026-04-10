@@ -262,7 +262,7 @@ function PhoneList() {
             <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)} className="filter-select">
               <option value="all">전체</option>
               <option value="삼성">삼성</option>
-              <option value="애플">애플</option>
+              <option value="apple">애플</option>
               <option value="구글">구글</option>
             </select>
           </div>

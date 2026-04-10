@@ -938,3 +938,89 @@
     width: 100%;
   }
 }
+/* ===== 액션 버튼 영역 (2x2 그리드, 글씨 가로) ===== */
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 가로 2개 */
+  grid-template-rows: auto auto;  /* 세로 2줄 */
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.wishlist-button,
+.cart-button,
+.view-cart-button,
+.buy-button {
+  padding: 15px 10px; /* 좌우 패딩 줄임 */
+  border: none;
+  border-radius: 8px;
+  font-size: 15px; /* 폰트 약간 축소 */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap; /* 글씨 세로 방지! 핵심! */
+  overflow: hidden; /* 넘치는 글씨 숨김 */
+  text-overflow: ellipsis; /* ... 처리 */
+}
+
+/* 찜하기 버튼 */
+.wishlist-button {
+  background: white;
+  border: 2px solid #ec4899;
+  color: #ec4899;
+}
+
+.wishlist-button:hover {
+  background: #fce7f3;
+}
+
+.wishlist-button.active {
+  background: #ec4899;
+  color: white;
+}
+
+/* 장바구니 담기 버튼 */
+.cart-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+/* 장바구니 보기 버튼 */
+.view-cart-button {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.view-cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+}
+
+/* 바로구매 버튼 */
+.buy-button {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+  grid-column: 1 / -1; /* 전체 폭 차지 */
+}
+
+.buy-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(250, 112, 154, 0.4);
+}
+
+/* ===== 반응형 (모바일) ===== */
+@media (max-width: 768px) {
+  .action-buttons {
+    grid-template-columns: 1fr; /* 모바일에서는 세로로 */
+  }
+  
+  .buy-button {
+    grid-column: 1; /* 모바일에서는 전체 폭 해제 */
+  }
+}

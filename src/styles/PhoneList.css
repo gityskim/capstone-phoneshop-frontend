@@ -666,3 +666,90 @@
 .delete-phone-button:active {
   transform: scale(0.95);
 }
+/* ===== 액션 버튼 영역 (가로 1줄 배치) ===== */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.wishlist-button,
+.cart-button,
+.view-cart-button,
+.buy-button {
+  flex: 1;
+  min-width: 120px; /* 최소 폭 보장 */
+  padding: 15px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap; /* 글씨 세로 방지! */
+}
+
+/* 찜하기 버튼 */
+.wishlist-button {
+  background: white;
+  border: 2px solid #ec4899;
+  color: #ec4899;
+}
+
+.wishlist-button:hover {
+  background: #fce7f3;
+}
+
+.wishlist-button.active {
+  background: #ec4899;
+  color: white;
+}
+
+/* 장바구니 담기 버튼 */
+.cart-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+/* 장바구니 보기 버튼 */
+.view-cart-button {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.view-cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+}
+
+/* 바로구매 버튼 */
+.buy-button {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.buy-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(250, 112, 154, 0.4);
+}
+
+/* ===== 반응형 (모바일) ===== */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column; /* 모바일에서만 세로로 */
+  }
+  
+  .wishlist-button,
+  .cart-button,
+  .view-cart-button,
+  .buy-button {
+    min-width: 100%;
+  }
+}

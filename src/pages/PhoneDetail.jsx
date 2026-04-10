@@ -30,6 +30,19 @@ function PhoneDetail() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState('');
 
+    // ===== 새로 추가: 장바구니로 이동 =====
+  const handleGoToCart = () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    
+    if (isLoggedIn !== 'true') {
+      alert('로그인이 필요합니다');
+      navigate('/login');
+      return;
+    }
+ 
+    navigate('/cart');
+  };
+
   // Q&A 목록 로드
   const loadComments = useCallback(async () => {
     try {
@@ -305,10 +318,9 @@ function PhoneDetail() {
     }
   };
 
-  // 장바구니 추가
   const handleAddToCart = async () => {
     if (!phone) return;
-
+ 
     try {
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       
@@ -317,13 +329,21 @@ function PhoneDetail() {
         navigate('/login');
         return;
       }
-
+ 
       // 수량만큼 반복해서 추가
       for (let i = 0; i < quantity; i++) {
         await cartService.addItem(phone.id);
       }
-
-      alert(`장바구니에 ${quantity}개 추가되었습니다!`);
+ 
+      // ===== 수정된 부분: 확인창 =====
+      const goToCart = window.confirm(
+        `장바구니에 ${quantity}개가 추가되었습니다!\n장바구니로 이동하시겠습니까?`
+      );
+ 
+      if (goToCart) {
+        navigate('/cart');
+      }
+      // ===== 수정 끝 =====
     } catch (error) {
       console.error('장바구니 추가 실패:', error);
       alert(error.message || '장바구니 추가에 실패했습니다');
@@ -490,7 +510,10 @@ function PhoneDetail() {
                 {isWishlisted ? '❤️ 찜 완료' : '🤍 찜하기'}
               </button>
               <button onClick={handleAddToCart} className="cart-button">
-                🛒 장바구니
+                🛒 장바구니 담기
+              </button>
+              <button onClick={handleGoToCart} className="view-cart-button">
+                📋 장바구니 보기
               </button>
               <button onClick={handleBuyNow} className="buy-button">
                 구매하기
@@ -695,7 +718,6 @@ function PhoneDetail() {
                   <div className="comment-header-info">
                     <span className="commenter-name">{comment.userName}</span>
                     <div className="comment-meta">
-                      <span className="comment-date">{formatDate(comment.createdAt)}</span>
                       {currentUserId === comment.userId && editingCommentId !== comment.commentId && (
                         <div className="comment-actions">
                           <button 

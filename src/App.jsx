@@ -16,6 +16,7 @@ import OrderHistory from './pages/OrderHistory';
 import Wishlist from './pages/Wishlist';
 import AdminPhoneCreate from './pages/AdminPhoneCreate';
 import AdminPage from './pages/AdminPage';
+import CouponPage from './pages/CouponPage';
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin/phones/new" element={<AdminPhoneCreate />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/my-coupons" element={<CouponPage />} />
       </Routes>
     </Router>
   );
