@@ -103,12 +103,16 @@ function PhoneDetail() {
       const phoneData = await phoneService.getPhoneById(phoneId);
       setPhone(phoneData);
       
-      // 찜 상태 (로그인 시에만)
+      // 찜 상태 (로그인 시에만) - 에러 발생해도 페이지 로딩은 계속
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       if (isLoggedIn === 'true') {
-        const favorites = await favoriteService.getMyFavorites();
-        const isFavorited = favorites.some(fav => fav.phoneId === parseInt(phoneId));
-        setIsWishlisted(isFavorited);
+        try {
+          const favorites = await favoriteService.getMyFavorites();
+          const isFavorited = favorites.some(fav => fav.phoneId === parseInt(phoneId));
+          setIsWishlisted(isFavorited);
+        } catch (favError) {
+          console.warn('찜 상태 조회 실패 (무시):', favError);
+        }
       }
       
       // 리뷰 목록
