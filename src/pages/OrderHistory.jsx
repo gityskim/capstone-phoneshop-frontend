@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import orderService from '../services/orderService';
-import { API_BASE_URL } from '../config/api';
+import API_BASE_URL from '../config/api';
 import '../styles/OrderHistory.css';
 
 function OrderHistory() {
@@ -38,12 +38,28 @@ function OrderHistory() {
     }
   };
 
-  // 이미지 URL 변환 함수
+  // ===== 이미지 URL 변환 함수 =====
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
+    
     // 이미 http로 시작하면 그대로 반환
-    if (imageUrl.startsWith('http')) return encodeURI(imageUrl);
-    // 상대 경로면 백엔드 URL 붙이기
+    if (imageUrl.startsWith('http')) {
+      return encodeURI(imageUrl);
+    }
+    
+    // '/images/'로 시작하면 /api 제거
+    if (imageUrl.startsWith('/images/')) {
+      const baseUrl = API_BASE_URL.replace('/api', '');
+      return `${baseUrl}${imageUrl}`;
+    }
+    
+    // 'images/'로 시작하면 (슬래시 없음)
+    if (imageUrl.startsWith('images/')) {
+      const baseUrl = API_BASE_URL.replace('/api', '');
+      return `${baseUrl}/${imageUrl}`;
+    }
+    
+    // 기본: API_BASE_URL 붙이기
     return `${API_BASE_URL}${imageUrl}`;
   };
 
@@ -160,7 +176,7 @@ function OrderHistory() {
                     {order.items.slice(0, 2).map((item, index) => (
                       <div key={index} className="preview-item">
                         <img
-                          src={getImageUrl(item.imageUrl) || `https://placehold.co/80x80/667eea/FFF?text=${encodeURIComponent(item.phoneName)}`}
+                          src={getImageUrl(item.imageUrl) || `https://placehold.co/80x80/667eea/FFF?text=${encodeURIComponent(item.phoneName || 'Phone')}`}
                           alt={item.phoneName}
                           onError={(e) => {
                             if (!e.target.dataset.fallback) {
@@ -193,7 +209,7 @@ function OrderHistory() {
                           {order.items.map((item, index) => (
                             <div key={index} className="details-item">
                               <img
-                                src={getImageUrl(item.imageUrl) || `https://placehold.co/60x60/667eea/FFF?text=${encodeURIComponent(item.phoneName)}`}
+                                src={getImageUrl(item.imageUrl) || `https://placehold.co/60x60/667eea/FFF?text=${encodeURIComponent(item.phoneName || 'Phone')}`}
                                 alt={item.phoneName}
                                 onError={(e) => {
                                   if (!e.target.dataset.fallback) {
